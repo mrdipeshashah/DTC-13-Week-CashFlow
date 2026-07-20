@@ -1,25 +1,51 @@
-SELECT 
-  Date,
-  EXTRACT(ISOYEAR FROM Date) AS Year,
-  EXTRACT(ISOWEEK FROM Date) AS Week_Number,
-  CONCAT(EXTRACT(ISOYEAR FROM Date), '-W', LPAD(CAST(EXTRACT(ISOWEEK FROM Date) AS STRING), 2, '0')) AS Week_Label,
-  Category, 
-  Sub_Category, 
-  Amount, 
-  Notes,
-  'Forecast' AS Type
-FROM `mrdipeshashah.13weekcashflow.forecast`
+WITH master_union AS (
+  SELECT 
+    Date,
+    EXTRACT(ISOYEAR FROM Date) AS Year,
+    EXTRACT(ISOWEEK FROM Date) AS Week_Number,
+    CONCAT(EXTRACT(ISOYEAR FROM Date), '-W', LPAD(CAST(EXTRACT(ISOWEEK FROM Date) AS STRING), 2, '0')) AS Week_Label,
+    Category, 
+    Sub_Category,
+    Amount, 
+    Notes,
+    'Forecast' AS Type
+  FROM `mrdipeshashah.13weekcashflow.forecast`
 
-UNION ALL
+  UNION ALL
+
+  SELECT 
+    Date,
+    EXTRACT(ISOYEAR FROM Date) AS Year,
+    EXTRACT(ISOWEEK FROM Date) AS Week_Number,
+    CONCAT(EXTRACT(ISOYEAR FROM Date), '-W', LPAD(CAST(EXTRACT(ISOWEEK FROM Date) AS STRING), 2, '0')) AS Week_Label,
+    Category, 
+    Sub_Category, 
+    Amount, 
+    Notes,
+    'Actual' AS Type
+  FROM `mrdipeshashah.13weekcashflow.actual`
+),
+
+daily_totals AS (
+  SELECT 
+    Date,
+    SUM(Amount) AS Daily_Net
+  FROM master_union
+  GROUP BY Date
+),
+
+daily_running AS (
+  SELECT 
+    Date,
+    13800 + SUM(Daily_Net) OVER (
+      ORDER BY Date 
+      ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS Projected_Cash_Balance
+  FROM daily_totals
+)
 
 SELECT 
-  Date,
-  EXTRACT(ISOYEAR FROM Date) AS Year,
-  EXTRACT(ISOWEEK FROM Date) AS Week_Number,
-  CONCAT(EXTRACT(ISOYEAR FROM Date), '-W', LPAD(CAST(EXTRACT(ISOWEEK FROM Date) AS STRING), 2, '0')) AS Week_Label,
-  Category, 
-  Sub_Category, 
-  Amount, 
-  Notes,
-  'Actual' AS Type
-FROM `mrdipeshashah.13weekcashflow.actual`
+  m.*,
+  COALESCE(r.Projected_Cash_Balance, 13800) AS Ending_Cash_Balance
+FROM master_union m
+LEFT JOIN daily_running r ON m.Date = r.Date;
