@@ -1,0 +1,25 @@
+SELECT 
+  Date,
+  EXTRACT(ISOYEAR FROM Date) AS Year,
+  EXTRACT(ISOWEEK FROM Date) AS Week_Number,
+  CONCAT(EXTRACT(ISOYEAR FROM Date), '-W', LPAD(CAST(EXTRACT(ISOWEEK FROM Date) AS STRING), 2, '0')) AS Week_Label,
+  Category, 
+  Sub_Category, 
+  Amount, 
+  Notes,
+  'Forecast' AS Type
+FROM `mrdipeshashah.13weekcashflow.forecast`
+
+UNION ALL
+
+SELECT 
+  Date,
+  EXTRACT(ISOYEAR FROM Date) AS Year,
+  EXTRACT(ISOWEEK FROM Date) AS Week_Number,
+  CONCAT(EXTRACT(ISOYEAR FROM Date), '-W', LPAD(CAST(EXTRACT(ISOWEEK FROM Date) AS STRING), 2, '0')) AS Week_Label,
+  Category, 
+  Sub_Category, 
+  Amount, 
+  Notes,
+  'Actual' AS Type
+FROM `mrdipeshashah.13weekcashflow.actual`
