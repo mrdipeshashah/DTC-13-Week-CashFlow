@@ -5,9 +5,12 @@ An automated 13-Week Cash Flow modeling system built using **Google Sheets** (da
 Google Sheet Template - https://docs.google.com/spreadsheets/d/1-17dIbItTSk_YAnB-5KVlWBnzcrYf8_-Sy7J-6swSJA/edit?usp=sharing
 Data Studio Dashboard - https://datastudio.google.com/reporting/c7850be5-a9b9-48d7-8018-45977b806615
 
-# 1. Data Intake Layer (Google Sheets)
+# 1. GOOGLE SHEETS - DATA INPUT
 
 Raw transaction logs and driver forecasts are maintained in Google Sheets. The sheet contains two main tabs: **`Forecast`** and **`Actual`**. Data must remain flat (row-by-row) to ensure continuous ingestion into BigQuery.
+
+- In the Google Sheet tempalte shared is how categories and sub cateogires are aligned, this will need to be decided in advance
+- There are two tabs in the Google Sheet for Actuals and Forecasts, Forecasts is the focal point of the 13-week cashflow but the goal should be to also populate the Actuals provides addtional insights. Without actuals, you can never answer: "How good are our forecasts?"
 
 ### Sheet Schema & Data Point Definitions
 
