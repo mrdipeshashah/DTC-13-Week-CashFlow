@@ -1,6 +1,6 @@
-# DTC 13-Week Cash Flow Engine & Looker Studio Dashboard
+# DTC 13-WEEK CASH FLOW
 
-A dynamic, automated 13-Week Cash Flow modeling system built using **Google Sheets** (intake layer), **Google BigQuery** (transformation & rolling logic engine), and **Looker Studio** (executive dashboard & granular ledger).
+AN automated 13-Week Cash Flow modeling system built using **Google Sheets** (data input), **Google BigQuery** (transformation & rolling logic engine), and **Looker Studio** (executive dashboard & granular ledger).
 
 ---
 
