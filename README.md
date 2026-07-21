@@ -4,15 +4,6 @@ A dynamic, automated 13-Week Cash Flow modeling system built using **Google Shee
 
 ---
 
-## 📋 Table of Contents
-1. [Architecture Overview](#architecture-overview)
-2. [Data Intake Layer (Google Sheets)](#1-data-intake-layer-google-sheets)
-3. [BigQuery Views & SQL Logic](#2-bigquery-views--sql-logic)
-4. [Looker Studio Dashboard & KPI Metrics](#3-looker-studio-dashboard--kpi-metrics)
-5. [How to Operate & Filter](#4-how-to-operate--filter)
-
----
-
 # 1. Data Intake Layer (Google Sheets)
 
 Raw transaction logs and driver forecasts are maintained in Google Sheets. The sheet contains two main tabs: **`Forecast`** and **`Actual`**. Data must remain flat (row-by-row) to ensure continuous ingestion into BigQuery.
