@@ -1,0 +1,39 @@
+WITH weekly_totals AS (
+  SELECT
+    week_label,
+    MIN(date) AS week_start_date,
+    Type AS actual_v_forecast, -- Pulls directly from 'Type'
+    SUM(amount) AS net_amount
+  FROM
+    `mrdipeshashah.13weekcashflow.master_13weekcashflow_view`
+  GROUP BY
+    week_label,
+    Type
+)
+SELECT
+  week_label,
+  week_start_date,
+  actual_v_forecast,
+  net_amount AS amount,
+
+  -- 1. Opening Cash: Pulls ending cash from previous week (uses £15,870 baseline for Week 1)
+  COALESCE(
+    15870 + SUM(net_amount) OVER (
+      PARTITION BY actual_v_forecast
+      ORDER BY week_start_date 
+      ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
+    ), 
+    15870
+  ) AS opening_cash,
+
+  -- 2. Ending Cash: Cumulative net flow including current week
+  15870 + SUM(net_amount) OVER (
+    PARTITION BY actual_v_forecast
+    ORDER BY week_start_date 
+    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+  ) AS ending_cash
+
+FROM
+  weekly_totals
+ORDER BY
+  week_start_date
