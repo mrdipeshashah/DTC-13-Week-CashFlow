@@ -1,51 +1,50 @@
 WITH master_union AS (
-  SELECT 
-    Date,
-    EXTRACT(ISOYEAR FROM Date) AS Year,
-    EXTRACT(ISOWEEK FROM Date) AS Week_Number,
-    CONCAT(EXTRACT(ISOYEAR FROM Date), '-W', LPAD(CAST(EXTRACT(ISOWEEK FROM Date) AS STRING), 2, '0')) AS Week_Label,
-    Category, 
-    Sub_Category,
-    Amount, 
-    Notes,
-    'Forecast' AS Type
-  FROM `mrdipeshashah.13weekcashflow.forecast`
-
+  SELECT Date, Category, Sub_Category, Amount, Notes, 'Forecast' AS Type FROM `mrdipeshashah.13weekcashflow.forecast`
   UNION ALL
-
-  SELECT 
-    Date,
-    EXTRACT(ISOYEAR FROM Date) AS Year,
-    EXTRACT(ISOWEEK FROM Date) AS Week_Number,
-    CONCAT(EXTRACT(ISOYEAR FROM Date), '-W', LPAD(CAST(EXTRACT(ISOWEEK FROM Date) AS STRING), 2, '0')) AS Week_Label,
-    Category, 
-    Sub_Category, 
-    Amount, 
-    Notes,
-    'Actual' AS Type
-  FROM `mrdipeshashah.13weekcashflow.actual`
+  SELECT Date, Category, Sub_Category, Amount, Notes, 'Actual' AS Type FROM `mrdipeshashah.13weekcashflow.actual`
 ),
 
-daily_totals AS (
+-- 1. Daily net amount using actuals where available, otherwise forecast
+daily_net AS (
   SELECT 
     Date,
-    SUM(Amount) AS Daily_Net
+    SUM(Amount) AS Day_Amount
   FROM master_union
+  -- Keeps Forecast only if no Actual exists for that date
+  WHERE Type = 'Actual' 
+     OR (Type = 'Forecast' AND Date NOT IN (SELECT DISTINCT Date FROM `mrdipeshashah.13weekcashflow.actual`))
   GROUP BY Date
 ),
 
-daily_running AS (
+-- 2. Daily date spine starting from July 20, 2026
+date_grid AS (
+  SELECT day AS Date 
+  FROM UNNEST(GENERATE_DATE_ARRAY('2026-07-20', '2026-12-31', INTERVAL 1 DAY)) AS day
+),
+
+-- 3. Calculate running total cleanly (1 row per day starting at £13,800)
+daily_balance AS (
   SELECT 
-    Date,
-    13800 + SUM(Daily_Net) OVER (
-      ORDER BY Date 
+    g.Date,
+    13800 + SUM(COALESCE(d.Day_Amount, 0)) OVER (
+      ORDER BY g.Date 
       ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
-    ) AS Projected_Cash_Balance
-  FROM daily_totals
+    ) AS Ending_Cash_Balance
+  FROM date_grid g
+  LEFT JOIN daily_net d ON g.Date = d.Date
 )
 
+-- 4. Combine line items with the calculated daily balance
 SELECT 
-  m.*,
-  COALESCE(r.Projected_Cash_Balance, 13800) AS Ending_Cash_Balance
+  m.Date,
+  EXTRACT(ISOYEAR FROM m.Date) AS Year,
+  EXTRACT(ISOWEEK FROM m.Date) AS Week_Number,
+  CONCAT(EXTRACT(ISOYEAR FROM m.Date), '-W', LPAD(CAST(EXTRACT(ISOWEEK FROM m.Date) AS STRING), 2, '0')) AS Week_Label,
+  m.Category, 
+  m.Sub_Category, 
+  m.Amount, 
+  m.Notes,
+  m.Type,
+  b.Ending_Cash_Balance
 FROM master_union m
-LEFT JOIN daily_running r ON m.Date = r.Date;
+INNER JOIN daily_balance b ON m.Date = b.Date;
