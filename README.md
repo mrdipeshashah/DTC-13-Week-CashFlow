@@ -1,5 +1,110 @@
-A 13-week cash flow forecast is the gold standard for short-term liquidity management. It maps out every dollar coming in and going out over exactly one quarter, letting you spot cash crunches before they happen.
+# DTC 13-Week Cash Flow Engine & Looker Studio Dashboard
 
-Instead of relying on accounting concepts like net income or accounts receivable, this model focuses purely on actual bank balances.
+A dynamic, automated 13-Week Cash Flow modeling system built using **Google Sheets** (intake layer), **Google BigQuery** (transformation & rolling logic engine), and **Looker Studio** (executive dashboard & granular ledger).
 
-The Baseline MechanicsThe math behind the model is simple and rolls forward week by week:$$\text{Beginning Cash} + \text{Cash Receipts} - \text{Cash Disbursements} = \text{Ending Cash}$$The ending cash of Week 1 automatically becomes the beginning cash of Week 2.Core ComponentsTo build an accurate forecast, break your numbers down into three primary buckets:Cash Receipts (Inflows): Do not just look at total sales. Map out when customers actually pay. Look at your aging accounts receivable report and historical collection times to forecast cash arrivals realistically.Cash Disbursements (Outflows): List all upcoming payments by the week they are due. Group these into critical operating buckets (like payroll, rent, utilities, and major vendor invoices).Non-Operating Items: Include things that do not happen every week but drain or add cash quickly, such as loan payments, tax installments, or funding rounds.Why exactly 13 weeks?One full quarter: It aligns perfectly with standard corporate reporting periods.Predictability horizon: 90 days is generally the maximum limit where operational visibility remains reliable. Beyond 13 weeks, forecasting individual vendor bills or customer collection dates turns into guesswork.Early warning system: If your model shows a negative balance in Week 8, you have two months to defer capital expenses, chase down overdue invoices, or secure a line of credit.
+---
+
+## 📋 Table of Contents
+1. [Architecture Overview](#architecture-overview)
+2. [Data Intake Layer (Google Sheets)](#1-data-intake-layer-google-sheets)
+3. [BigQuery Views & SQL Logic](#2-bigquery-views--sql-logic)
+4. [Looker Studio Dashboard & KPI Metrics](#3-looker-studio-dashboard--kpi-metrics)
+5. [How to Operate & Filter](#4-how-to-operate--filter)
+
+---
+
+# 1. Data Intake Layer (Google Sheets)
+
+Raw transaction logs and driver forecasts are maintained in Google Sheets. The sheet contains two main tabs: **`Forecast`** and **`Actual`**. Data must remain flat (row-by-row) to ensure continuous ingestion into BigQuery.
+
+### Sheet Schema & Data Point Definitions
+
+| Field Name | Data Type | Description & Usage | Example |
+| :--- | :--- | :--- | :--- |
+| **`Date`** | `DATE` (YYYY-MM-DD) | The specific date of the actual cash transaction or projected forecast item. | `2026-07-20` |
+| **`Category`** | `STRING` | Top-level financial classification (`Revenue`, `Cost of Goods Sold`, `Operating Expenses`, `Financing Activities`). | `Operating Expenses` |
+| **`Sub_Category`** | `STRING` | Granular breakdown of the category used for cost analysis and drill-downs. | `Marketing & Advertising` |
+| **`Amount`** | `NUMERIC` | Net monetary value. **Inflows must be positive numbers; outflows must be negative numbers.** | `-6000` |
+| **`Notes`** | `STRING` | Operational notes, vendor names, or context explaining the transaction line item. | `Meta & Google ad spend` |
+
+> **Note:** The tab name (`Forecast` or `Actual`) automatically maps to the `Type` / `actual_v_forecast` column inside BigQuery views.
+
+## 2. BigQuery Views & SQL Logic
+
+The repository contains two core SQL view definitions powering the reporting layer:
+
+### A. `master_13weekcashflow_view` (Granular Ledger View)
+* **Purpose:** Combines `Forecast` and `Actual` logs into a unified dataset, calculates calendar/ISO week numbers, and formats `Week_Label` strings.
+* **Primary Use:** Powers **Page 2 (Detailed Cash Flow Breakdown)** in Looker Studio and granular expense/revenue bar charts.
+
+#### Schema Breakdown
+| Column Name | Type | Key Calculation / Notes |
+| :--- | :--- | :--- |
+| `Date` | `DATE` | Raw transaction date from Google Sheets. |
+| `Year` | `INTEGER` | Extracted calendar year (`EXTRACT(YEAR FROM Date)`). |
+| `Week_Number` | `INTEGER` | ISO week number (`EXTRACT(ISOWEEK FROM Date)`). |
+| `Week_Label` | `STRING` | Formatted year-week identifier (`YYYY-WXX`, e.g., `2026-W30`). |
+| `Category` | `STRING` | Cash flow category. |
+| `Sub_Category` | `STRING` | Detailed line item category. |
+| `Amount` | `NUMERIC` | Transaction amount (+ for inflows, - for outflows). |
+| `Notes` | `STRING` | Qualitative context/memo. |
+| `Type` | `STRING` | Source classification (`Actual` vs `Forecast`). |
+
+---
+
+### B. `vw_weekly_cashflow_summary` (Rolling Cash Flow Engine)
+* **Purpose:** Aggregates net cash flows by week and applies SQL window functions (`SUM() OVER (...)`) to compute exact rolling `Opening Cash` and `Ending Cash` positions week-over-week.
+* **Primary Use:** Powers **Page 1 (Executive Summary Table & Top Scorecards)**.
+
+#### Schema Breakdown
+| Column Name | Type | Key Calculation / Notes |
+| :--- | :--- | :--- |
+| `week_label` | `STRING` | ISO week identifier (e.g., `2026-W30`). |
+| `week_start_date` | `DATE` | Start date (Monday) of the respective week. |
+| `actual_v_forecast` | `STRING` | Distinguishes whether the weekly summary represents `Actual` or `Forecast`. |
+| `amount` | `NUMERIC` | Net weekly cash flow (`SUM(Amount)` for that week). |
+| `opening_cash` | `NUMERIC` | Cash balance at the start of the week. Calculated dynamically from baseline starting cash + prior cumulative net flows. |
+| `ending_cash` | `NUMERIC` | Cash balance at the end of the week (`opening_cash + amount`). |
+
+---
+
+## 3. Looker Studio Dashboard & KPI Metrics
+
+The dashboard is structured into two main views to serve both high-level executive reviews and detailed auditing.
+
+### Page 1: Executive 13-Week Overview
+
+#### Scorecard Metrics
+| Metric Name | Underlying Field | Aggregation | Definition & Meaning |
+| :--- | :--- | :--- | :--- |
+| **LIVE STARTING CASH** | `opening_cash` | `MIN` or `MAX` | The starting bank cash balance for Week 1 of the selected 13-week period. |
+| **13 WEEK MINIMUM CASH BALANCE** | `ending_cash` | `MIN` | The lowest predicted cash balance over the next 13 weeks. Serves as a **liquidity safety metric** to flag cash crunch risks. |
+| **13 WEEK NET CASH FLOW** | `amount` | `SUM` | Total net cash generated or consumed across the entire 13-week period (Sum of Inflows - Sum of Outflows). |
+
+#### Charts & Tables
+1. **13-Week Cash Balance Forecasted (Column Chart):**
+   * **Dimension:** `week_label`
+   * **Metric:** `ending_cash` (`MAX` aggregation)
+   * **Purpose:** Visualizes liquidity trends and ending weekly cash trajectory over time.
+2. **Weekly Cash Flow Summary Table:**
+   * **Columns:** `Week Starting Date` ➔ `Week Label` ➔ `Opening Cash` ➔ `Amount` ➔ `Ending Cash`
+   * **Purpose:** Displays full accounting rolling math where each week's `Ending Cash` carries over as the next week's `Opening Cash`.
+
+---
+
+### Page 2: Detailed Breakdown & Ledger
+
+* **Data Source:** Connected directly to `master_13weekcashflow_view`.
+* **Table Fields:** `Date`, `Week_Label`, `Category`, `Sub_Category`, `Notes`, `Type`, `Amount`.
+* **Purpose:** Line-by-line audit ledger allowing teams to inspect individual transactions, vendor payments, and specific marketing/inventory allocations.
+
+---
+
+## 4. How to Operate & Filter
+
+1. **Page-Level Control Dropdown (`Type` / `actual_v_forecast`):**
+   * Located at the top of the dashboard.
+   * Toggle to **`Actual`** to review historical performance and audit real ledger entries.
+   * Toggle to **`Forecast`** to view projected 13-week liquidity, future minimum cash balances, and budget allocations.
+2. **Date Range Picker:**
+   * Adjusts the 13-week rolling window dynamically across both dashboard pages simultaneously without breaking underlying BigQuery calculations.
