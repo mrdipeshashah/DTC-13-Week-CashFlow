@@ -12,7 +12,7 @@ Raw transaction logs and driver forecasts are maintained in Google Sheets. The s
 - In the Google Sheet tempalte shared is how categories and sub cateogires are aligned, this will need to be decided in advance
 - There are two tabs in the Google Sheet for Actuals and Forecasts, Forecasts is the focal point of the 13-week cashflow but the goal should be to also populate the Actuals provides addtional insights. Without actuals, you can never answer: "How good are our forecasts?"
 
-### Sheet Schema & Data Point Definitions
+### GOOGLE SHEET SCHEMA & DATA POINT DEFINITIONS
 
 | Field Name | Data Type | Description & Usage | Example |
 | :--- | :--- | :--- | :--- |
@@ -21,6 +21,7 @@ Raw transaction logs and driver forecasts are maintained in Google Sheets. The s
 | **`Sub_Category`** | `STRING` | Granular breakdown of the category used for cost analysis and drill-downs. | `Marketing & Advertising` |
 | **`Amount`** | `NUMERIC` | Net monetary value. **Inflows must be positive numbers; outflows must be negative numbers.** | `-6000` |
 | **`Notes`** | `STRING` | Operational notes, vendor names, or context explaining the transaction line item. | `Meta & Google ad spend` |
+
 
 > **Note:** The tab name (`Forecast` or `Actual`) automatically maps to the `Type` / `actual_v_forecast` column inside BigQuery views.
 
