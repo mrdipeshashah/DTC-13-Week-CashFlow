@@ -48,7 +48,7 @@ The repository contains four core SQL view definitions powering the reporting la
 
 ---
 
-### B. `vw_weekly_cashflow_summary` (Rolling Cash Flow Engine)
+### B. `1.1_weekly_summary_view` (Rolling Cash Flow Engine)
 * **Purpose:** Aggregates net cash flows by week and applies SQL window functions (`SUM() OVER (...)`) to compute exact rolling `Opening Cash` and `Ending Cash` positions week-over-week.
 * **Primary Use:** Powers **Page 1 (Executive Summary Table & Top Scorecards)**.
 
