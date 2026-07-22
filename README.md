@@ -25,11 +25,11 @@ Raw transaction logs and driver forecasts are maintained in Google Sheets. The s
 
 > **Note:** The tab name (`Forecast` or `Actual`) automatically maps to the `Type` / `actual_v_forecast` column inside BigQuery views.
 
-## 2. BigQuery Views & SQL Logic
+## 2.BIG QUERY VIEWS 
 
-The repository contains two core SQL view definitions powering the reporting layer:
+The repository contains four core SQL view definitions powering the reporting layer:
 
-### A. `master_13weekcashflow_view` (Granular Ledger View)
+### A. `1.0master_view` (Granular Ledger View)
 * **Purpose:** Combines `Forecast` and `Actual` logs into a unified dataset, calculates calendar/ISO week numbers, and formats `Week_Label` strings.
 * **Primary Use:** Powers **Page 2 (Detailed Cash Flow Breakdown)** in Looker Studio and granular expense/revenue bar charts.
 
