@@ -111,7 +111,15 @@ The dashboard is structured into two main views to serve both high-level executi
    * **Dimension:** `week_label`
    * **Metric:** `ending_cash` (`MAX` aggregation)
    * **Purpose:** Visualizes liquidity trends and ending weekly cash trajectory over time.
-2. **Weekly Cash Flow Summary Table:**
+2. **Weekly Cash In v Cash Out (Column Chart):**
+   * **Dimension:** `categoty` & `sub-categoty`
+   * **Metric:** `amount` (`SUM` aggregation)
+   * **Purpose:** Split by category showing the cash in v cash out for the selected 13 week period.
+2. **13 Week Expense Outflow by Category & by Sub Category (Column Chart):**
+   * **Dimension:** `week_label`
+   * **Metric:** `Total Spend` (`SUM` aggregation) (Add Calulated Field ABS(Amount))
+   * **Purpose:** Split by category / Sub-Category showing the cash out for the selected 13 week period.
+4. **Weekly Cash Flow Summary Table:**
    * **Columns:** `Week Starting Date` ➔ `Week Label` ➔ `Opening Cash` ➔ `Amount` ➔ `Ending Cash`
    * **Purpose:** Displays full accounting rolling math where each week's `Ending Cash` carries over as the next week's `Opening Cash`.
 
