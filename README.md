@@ -115,15 +115,40 @@ The dashboard is structured into two main views to serve both high-level executi
    * **Columns:** `Week Starting Date` ➔ `Week Label` ➔ `Opening Cash` ➔ `Amount` ➔ `Ending Cash`
    * **Purpose:** Displays full accounting rolling math where each week's `Ending Cash` carries over as the next week's `Opening Cash`.
 
----
-
 ### Page 2: Detailed Breakdown & Ledger
 
 * **Data Source:** Connected directly to `master_13weekcashflow_view`.
 * **Table Fields:** `Date`, `Week_Label`, `Category`, `Sub_Category`, `Notes`, `Type`, `Amount`.
 * **Purpose:** Line-by-line audit ledger allowing teams to inspect individual transactions, vendor payments, and specific marketing/inventory allocations.
 
----
+### Page 3: Variance & Forecast Accuracy Analysis
+
+#### Scorecard Metrics
+
+| Metric Name | Underlying Field | Aggregation | Definition & Meaning |
+| :--- | :--- | :--- | :--- |
+| **FORECAST NET FLOW** | `forecast_net_flow` | `SUM` | Total projected cash movement across the selected date range. |
+| **ACTUAL NET FLOW** | `actual_net_flow` | `SUM` | Total realized bank cash movement across the selected date range. |
+| **NET VARIANCE** | `variance_amount` | `SUM` | Absolute monetary difference between Actuals and Forecast (`Actual - Forecast`). |
+| **NET VARIANCE %** | Calculated Metric | Formula | Relative performance percentage (`(SUM(actual) - SUM(forecast)) / ABS(SUM(forecast))`). |
+
+#### Charts & Tables
+
+1. **Weekly Net Cash Flow (Grouped Column Chart):**
+   * **Dimension:** `Week_Label` *(Sorted Ascending by `week_start_date`)*
+   * **Metrics:** `forecast_net_flow` (Forecast Net Flow), `actual_net_flow` (Actual Net Flow)
+   * **Purpose:** Visualizes side-by-side weekly performance comparison between baseline projections and realized cash flows.
+
+2. **Weekly Variance Summary Table:**
+   * **Dimensions:** `Week_Label`
+   * **Metrics:** `forecast_net_flow` $\rightarrow$ `actual_net_flow` $\rightarrow$ `variance_amount` $\rightarrow$ `variance_pct`
+   * **Purpose:** Provides a weekly line-by-line monetary and percentage variance breakdown for executive reviews.
+
+3. **Cost & Expense Leakage Breakdown Table:**
+   * **Dimensions:** `Category` $\rightarrow$ `Sub_Category`
+   * **Metrics:** `forecast_amount` $\rightarrow$ `actual_amount` $\rightarrow$ `variance_amount`
+   * **Table Filter:** `Exclude Category = 'Revenue'`
+   * **Purpose:** Granular category drill-down surfacing operational budget overspends and cost leakage (highlighted in red for negative variances).
 
 ## 4. How to Operate & Filter
 
