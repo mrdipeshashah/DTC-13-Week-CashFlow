@@ -46,8 +46,6 @@ The repository contains four core SQL view definitions powering the reporting la
 | `Notes` | `STRING` | Qualitative context/memo. |
 | `Type` | `STRING` | Source classification (`Actual` vs `Forecast`). |
 
----
-
 ### `1.1_weekly_summary_view` (Rolling Cash Flow Engine)
 * **Purpose:** Aggregates net cash flows by week and applies SQL window functions (`SUM() OVER (...)`) to compute exact rolling `Opening Cash` and `Ending Cash` positions week-over-week.
 * **Primary Use:** Powers **Page 2 (Weekly Cash Flow)**
