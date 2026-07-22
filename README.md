@@ -29,7 +29,7 @@ Raw transaction logs and driver forecasts are maintained in Google Sheets. The s
 
 The repository contains four core SQL view definitions powering the reporting layer:
 
-### A. `1.0master_view` (Granular Ledger View)
+### A. `1.master_view` (Granular Ledger View)
 * **Purpose:** Combines `Forecast` and `Actual` logs into a unified dataset, calculates calendar/ISO week numbers, and formats `Week_Label` strings.
 * **Primary Use:** Powers **Page 2 (Detailed Cash Flow Breakdown)** in Looker Studio and granular expense/revenue bar charts.
 
