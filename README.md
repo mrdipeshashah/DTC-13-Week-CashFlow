@@ -93,9 +93,9 @@ The repository contains four core SQL view definitions powering the reporting la
 | **`actual_amount`** | `NUMERIC` | Total realized actual amount for the category/sub-category. |
 | **`variance_amount`** | `NUMERIC` | Absolute monetary difference (`actual_amount - forecast_amount`). |
 
-## 3. Looker Studio Dashboard & KPI Metrics
+## 3. DATA STUDIO DASHBOARD & KPI METRICS 
 
-The dashboard is structured into two main views to serve both high-level executive reviews and detailed auditing.
+The dashboard is structured into three main views to serve both high-level executive reviews and detailed auditing.
 
 ### Page 1: Executive 13-Week Overview
 
