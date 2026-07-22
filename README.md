@@ -1,13 +1,13 @@
 # DTC 13-WEEK CASH FLOW
 
-An automated 13-Week Cash Flow modeling system built using **Google Sheets** (data input), **Google BigQuery** (transformation & building the cash flow enging), and **Data Studio** (executive dashboard & granular ledger).
+An automated 13-Week Cash Flow modeling system built using **Google Sheets** (data input), **Google BigQuery** (transformation & building the cash flow enging), and **Data Studio** (executive dashboard & granular ledger)
 
 Google Sheet Template - https://docs.google.com/spreadsheets/d/1-17dIbItTSk_YAnB-5KVlWBnzcrYf8_-Sy7J-6swSJA/edit?usp=sharing
 Data Studio Dashboard - https://datastudio.google.com/reporting/c7850be5-a9b9-48d7-8018-45977b806615
 
 # 1. GOOGLE SHEETS - DATA INPUT
 
-Raw transaction logs and driver forecasts are maintained in Google Sheets. The sheet contains two main tabs: **`Forecast`** and **`Actual`**. Data must remain flat (row-by-row) to ensure continuous ingestion into BigQuery.
+Raw transaction logs and driver forecasts are maintained in Google Sheets. The sheet contains two main tabs: **`Forecast`** and **`Actual`**. Data must remain flat (row-by-row) to ensure continuous ingestion into BigQuery
 
 - In the Google Sheet tempalte shared is how categories and sub cateogires are aligned, this will need to be decided in advance
 - There are two tabs in the Google Sheet for Actuals and Forecasts, Forecasts is the focal point of the 13-week cashflow but the goal should be to also populate the Actuals provides addtional insights. Without actuals, you can never answer: "How good are our forecasts?"
@@ -30,7 +30,7 @@ Raw transaction logs and driver forecasts are maintained in Google Sheets. The s
 The repository contains four core SQL view definitions powering the reporting layer:
 
 ### `1.0_master_view` (Granular Ledger View)
-* **Purpose:** Combines `Forecast` and `Actual` logs into a unified dataset, calculates calendar/ISO week numbers, and formats `Week_Label` strings.
+* **Purpose:** Combines `Forecast` and `Actual` logs into a unified dataset, calculates calendar/ISO week numbers, and formats `Week_Label` strings
 * **Primary Use:** Powers **Page 1 & 2 (Page 1: Scorecards + 13 Week Cash Balance Forecasted + Weekly Cash In & Cash Out + 13 Week Expense Outflow + Weekly Net Cash Flow. Page 2: Scorecards + Detailed Weekly Cash Flow)**
 
 #### Schema Breakdown
@@ -47,7 +47,7 @@ The repository contains four core SQL view definitions powering the reporting la
 | `Type` | `STRING` | Source classification (`Actual` vs `Forecast`). |
 
 ### `1.1_weekly_summary_view` (Rolling Cash Flow Engine)
-* **Purpose:** Aggregates net cash flows by week and applies SQL window functions (`SUM() OVER (...)`) to compute exact rolling `Opening Cash` and `Ending Cash` positions week-over-week.
+* **Purpose:** Aggregates net cash flows by week and applies SQL window functions (`SUM() OVER (...)`) to compute exact rolling `Opening Cash` and `Ending Cash` positions week-over-week
 * **Primary Use:** Powers **Page 2 (Weekly Cash Flow)**
 
 #### Schema Breakdown
@@ -63,7 +63,7 @@ The repository contains four core SQL view definitions powering the reporting la
 ### 1.2_actual_v_forecast_summary (Macro Variance Engine)
 
 * **Purpose:** Pivots raw transaction rows into weekly side-by-side totals and computes absolute and percentage variance using a dynamic daily date grid.
-* **Primary Use:** Powers Page 3 (Variance & Forecast Accuracy - Scorecards, Weekly Net Cash Flow Bar Chart, and Weekly Variance Summary Table).
+* **Primary Use:** Powers Page 3 (Scorecards + Weekly Net Cash Flow + Weekly Variance Summary)**
 
 #### Schema Breakdown
 
@@ -79,7 +79,7 @@ The repository contains four core SQL view definitions powering the reporting la
 ### 1.3_actual_v_forecast_category_variance (Category & Cost Leakage Breakdown)
 
 * **Purpose:** Aggregates performance by category and sub-category to pinpoint specific operational budget overspends and revenue variances.
-* **Primary Use:** Powers Page 3 (Cost & Expense Leakage Breakdown Table).
+* **Primary Use:** Powers Page 3 (Cost & Expense Leakage Breakdown Table)**
 
 #### Schema Breakdown
 
@@ -92,7 +92,6 @@ The repository contains four core SQL view definitions powering the reporting la
 | **`forecast_amount`** | `NUMERIC` | Total projected amount for the category/sub-category. |
 | **`actual_amount`** | `NUMERIC` | Total realized actual amount for the category/sub-category. |
 | **`variance_amount`** | `NUMERIC` | Absolute monetary difference (`actual_amount - forecast_amount`). |
-
 
 ## 3. Looker Studio Dashboard & KPI Metrics
 
