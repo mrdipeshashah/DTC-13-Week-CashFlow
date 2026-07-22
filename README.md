@@ -63,7 +63,7 @@ The repository contains four core SQL view definitions powering the reporting la
 ### 1.2_actual_v_forecast_summary (Macro Variance Engine)
 
 * **Purpose:** Pivots raw transaction rows into weekly side-by-side totals and computes absolute and percentage variance using a dynamic daily date grid.
-* **Primary Use:** Powers Page 3 (Scorecards + Weekly Net Cash Flow + Weekly Variance Summary)**
+* **Primary Use: **Powers Page 3 (Scorecards + Weekly Net Cash Flow + Weekly Variance Summary)**
 
 #### Schema Breakdown
 
