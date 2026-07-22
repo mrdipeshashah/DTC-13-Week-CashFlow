@@ -31,7 +31,7 @@ The repository contains four core SQL view definitions powering the reporting la
 
 ### A. `1.master_view` (Granular Ledger View)
 * **Purpose:** Combines `Forecast` and `Actual` logs into a unified dataset, calculates calendar/ISO week numbers, and formats `Week_Label` strings.
-* **Primary Use:** Powers **Page 2 (Detailed Cash Flow Breakdown)** in Looker Studio and granular expense/revenue bar charts.
+* **Primary Use:** Powers **Page 1 & 2 (Page 1: Scorecards + 13 Week Cash Balance Forecasted + Weekly Cash In & Cash Out + 13 Week Expense Outflow + Weekly Net Cash Flow. Page 2: Scorecards + Detailed Weekly Cash Flow)**.
 
 #### Schema Breakdown
 | Column Name | Type | Key Calculation / Notes |
@@ -50,7 +50,7 @@ The repository contains four core SQL view definitions powering the reporting la
 
 ### B. `1.1_weekly_summary_view` (Rolling Cash Flow Engine)
 * **Purpose:** Aggregates net cash flows by week and applies SQL window functions (`SUM() OVER (...)`) to compute exact rolling `Opening Cash` and `Ending Cash` positions week-over-week.
-* **Primary Use:** Powers **Page 1 (Executive Summary Table & Top Scorecards)**.
+* **Primary Use:** Powers **Page 2 (Weekly Cash Flow)**.
 
 #### Schema Breakdown
 | Column Name | Type | Key Calculation / Notes |
