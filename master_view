@@ -16,10 +16,16 @@ daily_net AS (
   GROUP BY Date
 ),
 
--- 2. Daily date spine starting from July 20, 2026
+-- 2. Dynamic daily date spine matching data range
 date_grid AS (
-  SELECT day AS Date 
-  FROM UNNEST(GENERATE_DATE_ARRAY('2026-07-20', '2026-12-31', INTERVAL 1 DAY)) AS day
+  SELECT day AS Date
+  FROM UNNEST(
+    GENERATE_DATE_ARRAY(
+      (SELECT MIN(Date) FROM master_union),
+      (SELECT MAX(Date) FROM master_union),
+      INTERVAL 1 DAY
+    )
+  ) AS day
 ),
 
 -- 3. Calculate running total cleanly (1 row per day starting at £13,800)
