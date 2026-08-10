@@ -11,7 +11,7 @@ Data Studio Dashboard - https://datastudio.google.com/reporting/c7850be5-a9b9-48
 
 Raw transaction logs and driver forecasts are maintained in Google Sheets. The sheet contains two main tabs: **`Forecast`** and **`Actual`**. Data must remain flat (row-by-row) to ensure continuous ingestion into BigQuery
 
-- In the Google Sheet tempalte shared is how categories and sub cateogires are aligned, this will need to be decided in advance
+- In the Google Sheet template shared is how categories and sub cateogires are aligned, this will need to be decided in advance
 - There are two tabs in the Google Sheet for Actuals and Forecasts, Forecasts is the focal point of the 13-week cashflow but the goal should be to also populate the Actuals provides addtional insights. Without actuals, you can never answer: "How good are our forecasts?"
 
 ### GOOGLE SHEET SCHEMA & DATA POINT DEFINITIONS
