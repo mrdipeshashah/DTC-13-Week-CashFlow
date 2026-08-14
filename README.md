@@ -1,6 +1,6 @@
-# DTC 13-WEEK CASH FLOW
-
 # OVERVIEW
+
+# DTC 13-WEEK CASH FLOW
 
 An automated 13-Week Cash Flow modeling system built using **Google Sheets** (data input), **Google BigQuery** (transformation & building the cash flow enging), and **Data Studio** (executive dashboard & granular ledger)
 
