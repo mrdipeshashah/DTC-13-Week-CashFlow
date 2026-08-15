@@ -1,8 +1,8 @@
 # OVERVIEW
 
-# DTC 13-WEEK CASH FLOW
+This repository contains Big Query code to build an automated 13-Week Cash Flow modelling system built using **Google Sheets** (data input), **Google BigQuery** (transformation & building the cash flow enging), and **Data Studio** (executive dashboard & granular ledger). The architecture moves heavy financial math—such as dynamic date spines, rolling cash balances, and variance aggregations—directly into BigQuery SQL views. This ensures fast Data Studio rendering, eliminates client-side metric lag, and makes the reporting pipeline **100% dynamic and zero-maintenance**.
 
-An automated 13-Week Cash Flow modeling system built using **Google Sheets** (data input), **Google BigQuery** (transformation & building the cash flow enging), and **Data Studio** (executive dashboard & granular ledger)
+# DASHBOARD & GOOGLE SHEET TEMPLATE
 
 Google Sheet Template - https://docs.google.com/spreadsheets/d/1-17dIbItTSk_YAnB-5KVlWBnzcrYf8_-Sy7J-6swSJA/edit?usp=sharing
 Data Studio Dashboard - https://datastudio.google.com/reporting/c7850be5-a9b9-48d7-8018-45977b806615
@@ -99,7 +99,7 @@ The repository contains four core SQL view definitions powering the reporting la
 
 The dashboard is structured into three main views to serve both high-level executive reviews and detailed auditing.
 
-### Page 1: Executive 13-Week Overview
+### PAGE 1: EXECUTIVE 13-WEEEK OVERVIEW
 
 #### Scorecard Metrics
 | Metric Name | Underlying Field | Aggregation | Definition & Meaning |
@@ -125,13 +125,13 @@ The dashboard is structured into three main views to serve both high-level execu
    * **Columns:** `Week Starting Date` ➔ `Week Label` ➔ `Opening Cash` ➔ `Amount` ➔ `Ending Cash`
    * **Purpose:** Displays full accounting rolling math where each week's `Ending Cash` carries over as the next week's `Opening Cash`.
 
-### Page 2: Detailed Breakdown & Ledger
+### PAGE 2: DETAILED BREAKDOWN & LEDGER
 
 * **Data Source:** Connected directly to `master_13weekcashflow_view`.
 * **Table Fields:** `Date`, `Week_Label`, `Category`, `Sub_Category`, `Notes`, `Type`, `Amount`.
 * **Purpose:** Line-by-line audit ledger allowing teams to inspect individual transactions, vendor payments, and specific marketing/inventory allocations.
 
-### Page 3: Variance & Forecast Accuracy Analysis
+### PAGE 3: VARIANCE & FORECAST ACCURANCY ANALYSIS
 
 #### Scorecard Metrics
 
@@ -160,7 +160,7 @@ The dashboard is structured into three main views to serve both high-level execu
    * **Table Filter:** `Exclude Category = 'Revenue'`
    * **Purpose:** Granular category drill-down surfacing operational budget overspends and cost leakage (highlighted in red for negative variances).
 
-## 4. How to Operate & Filter
+## 4. HOW TO OPERATE & FILTER
 
 1. **Page-Level Control Dropdown (`Type` / `actual_v_forecast`):**
    * Located at the top of the dashboard.
