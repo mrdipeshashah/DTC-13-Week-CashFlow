@@ -98,7 +98,27 @@ The repository contains four core SQL view definitions powering the reporting la
 
 ## 3. DATA STUDIO DASHBOARD & KPI METRICS 
 
-The dashboard is structured into three main views to serve both high-level executive reviews and detailed auditing.
+The dashboard is structured into three main pages to serve high-level executive reviews, operational auditing, and variance accounting. Each visual component maps directly back to the SQL views in the repository:
+
+### Visual Component & SQL View Mapping
+
+| Dashboard Page | Visual Component / Chart Title | SQL View / Data Source Code | Key Fields Used |
+| :--- | :--- | :--- | :--- |
+| **Page 1: Executive 13-Week Overview** | Scorecards (`LIVE STARTING CASH`, `13 WEEK MINIMUM CASH BALANCE`, `13 WEEK NET CASH FLOW`) | **`1.1_weekly_summary_view`** | `opening_cash`, `ending_cash`, `amount` |
+| | `WEEKLY CASH IN v CASH OUT` (Stacked Bar) | **`1.0_master_view`** | `Week_Label`, `Category`, `Amount` |
+| | `13 WEEK EXPENSE OUTFLOW BREAKDOWN BY CATEGORY` (Horizontal Bar) | **`1.0_master_view`** | `Category`, `Amount` |
+| | `13 WEEK EXPENSE OUTFLOW BREAKDOWN BY SUB CATEGORY` (Horizontal Bar) | **`1.0_master_view`** | `Sub_Category`, `Amount` |
+| | `WEEKLY NET CASH FLOW` (Bar Chart) | **`1.1_weekly_summary_view`** | `week_label`, `amount` |
+| | `13 WEEK CASH BALANCE FORECASTED` (Bar Chart) | **`1.1_weekly_summary_view`** | `week_label`, `ending_cash` |
+| | `WEEKLY CASH FLOW` (Summary Table) | **`1.1_weekly_summary_view`** | `week_start_date`, `week_label`, `opening_cash`, `amount`, `ending_cash` |
+| **Page 2: Detailed Breakdown & Ledger** | Scorecards (`LIVE STARTING CASH`, `13 WEEK MINIMUM CASH BALANCE`, `13 WEEK NET CASH FLOW`) | **`1.1_weekly_summary_view`** | `opening_cash`, `ending_cash`, `amount` |
+| | `DETAILED WEEKLY CASH FLOW` (Granular Audit Table) | **`1.0_master_view`** | `Week_Label`, `Date`, `Category`, `Sub_Category`, `Notes`, `Amount`, `Ending Cash` |
+| **Page 3: Variance & Forecast Accuracy** | Scorecards (`FORECAST NET FLOW`, `ACTUAL NET FLOW`, `NET VARIANCE`, `NET VARIANCE %`) | **`1.2_actual_v_forecast_summary`** | `forecast_net_flow`, `actual_net_flow`, `variance_amount`, `variance_pct` |
+| | `WEEKLY NET CASH FLOW` (Grouped Bar Chart) | **`1.2_actual_v_forecast_summary`** | `Week_Label`, `forecast_net_flow`, `actual_net_flow` |
+| | `WEEKLY VARIANCE SUMMARY` (Macro Summary Table) | **`1.2_actual_v_forecast_summary`** | `Week_Label`, `forecast_net_flow`, `actual_net_flow`, `variance_amount`, `variance_pct` |
+| | `COST & EXPENSE LEAKAGE BREAKDOWN` (Category Variance Table) | **`1.3_actual_v_forecast_category_variance`** | `Category`, `Sub_Category`, `forecast_amount`, `actual_amount`, `variance_amount` |
+
+---
 
 ### PAGE 1: EXECUTIVE 13-WEEEK OVERVIEW
 
