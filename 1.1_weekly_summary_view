@@ -5,7 +5,7 @@ WITH weekly_totals AS (
     Type AS actual_v_forecast, -- Pulls directly from 'Type'
     SUM(amount) AS net_amount
   FROM
-    `mrdipeshashah.13weekcashflow.master_13weekcashflow_view`
+    `enter.tablename.13weekcashflow.master_13weekcashflow_view`
   GROUP BY
     week_label,
     Type
