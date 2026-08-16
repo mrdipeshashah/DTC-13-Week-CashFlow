@@ -12,7 +12,7 @@ daily_net AS (
   FROM master_union
   -- Keeps Forecast only if no Actual exists for that date
   WHERE Type = 'Actual' 
-     OR (Type = 'Forecast' AND Date NOT IN (SELECT DISTINCT Date FROM `mrdipeshashah.13weekcashflow.actual`))
+     OR (Type = 'Forecast' AND Date NOT IN (SELECT DISTINCT Date FROM `enter.tablename_.13weekcashflow.actual`))
   GROUP BY Date
 ),
 
