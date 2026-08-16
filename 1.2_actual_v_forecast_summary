@@ -4,6 +4,6 @@ SELECT
   SUM(CASE WHEN Type = 'Actual' THEN Amount ELSE 0 END) AS actual_net_flow,
   SUM(CASE WHEN Type = 'Actual' THEN Amount ELSE 0 END) - 
   SUM(CASE WHEN Type = 'Forecast' THEN Amount ELSE 0 END) AS net_flow_variance
-FROM `mrdipeshashah.13weekcashflow.master_13weekcashflow_view`
+FROM `enter.tablename.13weekcashflow.master_13weekcashflow_view`
 GROUP BY Week_Label
 ORDER BY Week_Label ASC;
