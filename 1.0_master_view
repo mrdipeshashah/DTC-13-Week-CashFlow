@@ -1,7 +1,7 @@
 WITH master_union AS (
-  SELECT Date, Category, Sub_Category, Amount, Notes, 'Forecast' AS Type FROM `enter.tablename_.13weekcashflow.forecast`
+  SELECT Date, Category, Sub_Category, Amount, Notes, 'Forecast' AS Type FROM `enter.tablename.13weekcashflow.forecast`
   UNION ALL
-  SELECT Date, Category, Sub_Category, Amount, Notes, 'Actual' AS Type FROM `enter.tablename_.13weekcashflow.actual`
+  SELECT Date, Category, Sub_Category, Amount, Notes, 'Actual' AS Type FROM `enter.tablename.13weekcashflow.actual`
 ),
 
 -- 1. Daily net amount using actuals where available, otherwise forecast
@@ -12,7 +12,7 @@ daily_net AS (
   FROM master_union
   -- Keeps Forecast only if no Actual exists for that date
   WHERE Type = 'Actual' 
-     OR (Type = 'Forecast' AND Date NOT IN (SELECT DISTINCT Date FROM `enter.tablename_.13weekcashflow.actual`))
+     OR (Type = 'Forecast' AND Date NOT IN (SELECT DISTINCT Date FROM `enter.tablename.13weekcashflow.actual`))
   GROUP BY Date
 ),
 
