@@ -1,7 +1,7 @@
 WITH master_union AS (
-  SELECT Date, Category, Sub_Category, Amount, Notes, 'Forecast' AS Type FROM `mrdipeshashah.13weekcashflow.forecast`
+  SELECT Date, Category, Sub_Category, Amount, Notes, 'Forecast' AS Type FROM `enter.tablename_.13weekcashflow.forecast`
   UNION ALL
-  SELECT Date, Category, Sub_Category, Amount, Notes, 'Actual' AS Type FROM `mrdipeshashah.13weekcashflow.actual`
+  SELECT Date, Category, Sub_Category, Amount, Notes, 'Actual' AS Type FROM `enter.tablename_.13weekcashflow.actual`
 ),
 
 -- 1. Daily net amount using actuals where available, otherwise forecast
