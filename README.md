@@ -8,7 +8,23 @@ Google Sheet Template - https://docs.google.com/spreadsheets/d/1-17dIbItTSk_YAnB
 
 Data Studio Dashboard - https://datastudio.google.com/reporting/c7850be5-a9b9-48d7-8018-45977b806615
 
-# 1. GOOGLE SHEETS - DATA INPUT
+### KEY DIFFERENCES: GOOGLE SHEETS v DATA WAREHOUSE
+
+Atraditional **Google Sheets 13-Week Cash Flow model** relies exclusively on manual inputs and is almost strictly **Forecast-only**, this BigQuery-powered architecture introduces a **Dynamic Variance Engine** by seamlessly combining both **Actuals** and **Forecasts**.
+
+| Feature / Metric | Google Sheets (Standalone) | BigQuery Warehouse Architecture |
+| :--- | :--- | :--- |
+| **Primary Focus** | Forward-looking estimates only (**Forecast-only**). | Blended evaluation (**Forecast vs. Actuals**). |
+| **Actuals Tracking** | Requires manual cell overwrites or fragile multi-tab sheet formulas. | Fully automated blending via BigQuery dynamic date spines and SQL union layers. |
+| **Forecast Accuracy** | Hard to measure without breaking historical baseline models. | Real-time variance accounting (`£` delta and `%` accuracy) without touching raw logs. |
+| **Maintenance** | High risk of broken cell references as transaction volume grows. | **Zero-maintenance**: dynamic view boundaries handle new incoming transactions automatically. |
+
+### When to Use Each Approach?
+
+* **Google Sheets Only:** Ideal for small, early-stage businesses where financial tracking is simple, transaction volume is low, and side-by-side variance evaluation is not yet critical.
+* **BigQuery Warehouse Approach:** Essential for scaling or complex businesses that need real-time budget leakage tracking, automated runway evaluation, and reliable investor/board reporting. 
+
+# GOOGLE SHEETS - DATA INPUT
 
 Raw transaction logs and driver forecasts are maintained in Google Sheets. The sheet contains two main tabs: **`Forecast`** and **`Actual`**. Data must remain flat (row-by-row) to ensure continuous ingestion into BigQuery
 
@@ -28,7 +44,7 @@ Raw transaction logs and driver forecasts are maintained in Google Sheets. The s
 
 > **Note:** The tab name (`Forecast` or `Actual`) automatically maps to the `Type` / `actual_v_forecast` column inside BigQuery views.
 
-## 2.BIG QUERY VIEWS 
+## BIG QUERY VIEWS 
 
 The repository contains four core SQL view definitions powering the reporting layer:
 
@@ -96,7 +112,7 @@ The repository contains four core SQL view definitions powering the reporting la
 | **`actual_amount`** | `NUMERIC` | Total realized actual amount for the category/sub-category. |
 | **`variance_amount`** | `NUMERIC` | Absolute monetary difference (`actual_amount - forecast_amount`). |
 
-## 3. DATA STUDIO DASHBOARD & KPI METRICS 
+## DATA STUDIO DASHBOARD & KPI METRICS 
 
 The dashboard is structured into three main pages to serve high-level executive reviews, operational auditing, and variance accounting. Each visual component maps directly back to the SQL views in the repository:
 
@@ -181,7 +197,7 @@ The dashboard is structured into three main pages to serve high-level executive 
    * **Table Filter:** `Exclude Category = 'Revenue'`
    * **Purpose:** Granular category drill-down surfacing operational budget overspends and cost leakage (highlighted in red for negative variances).
 
-## 4. HOW TO OPERATE & FILTER
+## HOW TO OPERATE & FILTER
 
 1. **Page-Level Control Dropdown (`Type` / `actual_v_forecast`):**
    * Located at the top of the dashboard.
