@@ -8,7 +8,7 @@ Google Sheet Template - https://docs.google.com/spreadsheets/d/1-17dIbItTSk_YAnB
 
 Data Studio Dashboard - https://datastudio.google.com/reporting/c7850be5-a9b9-48d7-8018-45977b806615
 
-### KEY DIFFERENCES: GOOGLE SHEETS v DATA WAREHOUSE
+# KEY DIFFERENCES: GOOGLE SHEETS v DATA WAREHOUSE
 
 Atraditional **Google Sheets 13-Week Cash Flow model** relies exclusively on manual inputs and is almost strictly **Forecast-only**, this BigQuery-powered architecture introduces a **Dynamic Variance Engine** by seamlessly combining both **Actuals** and **Forecasts**.
 
