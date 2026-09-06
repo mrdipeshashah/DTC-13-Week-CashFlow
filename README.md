@@ -127,6 +127,21 @@ The repository contains four core SQL view definitions powering the reporting la
 | `Week_Label` | `STRING` | Formatted year-week identifier (`YYYY-WXX`). |
 | `Starting_Cash` | `NUMERIC` | The starting bank cash balance for Week 1 of the selected 13-week period |
 
-## DATA STUDIO DASHBOARD & KPI METRICS 
+## KPI METRICS DICTIONARY
+
+| KPI Name | Page No. | GitHub View No. | Description & Example |
+| :--- | :---: | :---: | :--- |
+| **Live Starting Cash** | Page 1 | View 1 | Displays the opening bank balance at the start of the 13-week forecast period.<br>**Example:** `£13,800` |
+| **13 Week Minimum Cash Balance** | Page 1 | View 1 | Represents the lowest projected cash position over the 13-week forecast horizon.<br>**Example:** `£21,650` |
+| **13 Week Net Cash Flow** | Page 1 | View 1 | Total net cash movement (inflows minus outflows) forecasted across the entire 13 weeks.<br>**Example:** `£710,519` |
+| **Forecasted 13 Week Cash Balance** | Page 1 | View 2 | Bar chart visualizing projected ending cash balance progression per week (`2026-W01` to `2026-W13`).<br>**Example:** `£21,650` in W01 growing to `£154,803` in W13 |
+| **Filtered Net Cash Flow** | Page 2 | View 1 | Dynamic scorecard showing total net cash movement based on active filters (e.g. Category, Sub Category).<br>**Example:** `£710,519` |
+| **Detailed Weekly Cash Flow** | Page 2 | View 2 | Granular line-item breakdown of transactions with fields: *Week Label*, *Date*, *Category*, *Sub Category*, *Notes*, *Amount*, and *Ending Cash*.<br>**Example:** Loan Payment in W01 = `-£1,200` |
+| **Forecast Net Flow** | Page 3 | View 1 | Baseline 13-week projected net cash movement.<br>**Example:** `£710,519` |
+| **Actual Net Flow** | Page 3 | View 1 | Total realized net cash movement recorded to date.<br>**Example:** `£829,200` |
+| **Net Variance** | Page 3 | View 1 | Absolute monetary variance between Actual and Forecasted cash flows (`Actual - Forecast`).<br>**Example:** `£118,681` |
+| **Net Variance %** | Page 3 | View 1 | Percentage variance of actual performance against budget/forecast (`Net Variance / Forecast`).<br>**Example:** `16.70%` |
+| **Opening Cash** | Page 3 | View 2 | Starting balance for the chronologically earliest week in the selected view range (rendered as 1-row table scorecard).<br>**Example:** `£15,870` (or `£154,803` for W14) |
+| **Actual Weekly Cash Flow** | Page 3 / Page 4 | View 2 | High-level weekly summary table with fields: *Week Label*, *Week Starting Date*, *Opening Cash*, *Amount*, and *Ending Cash*.<br>**Example:** W01 Amount = `£7,850`, Ending Cash = `£23,720` |
 
 
