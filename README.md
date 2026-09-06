@@ -46,7 +46,7 @@ Raw transaction logs and driver forecasts are maintained in Google Sheets. The s
 
 ## BIG QUERY VIEWS 
 
-The repository contains four core SQL view definitions powering the reporting layer:
+The repository contains five core SQL view definitions powering the reporting layer:
 
 ### `1.0_master-view` (Granular Ledger View)
 * **Purpose:** Combines `Forecast` and `Actual` logs into a unified dataset, calculates calendar/ISO week numbers, and formats `Week_Label` strings
@@ -136,10 +136,10 @@ The repository contains four core SQL view definitions powering the reporting la
 | **13 Week Net Cash Flow** | Page 1 | 1.0_master-view | Total net cash movement (inflows minus outflows) forecasted across the entire 13 weeks.<br>**Example:** `£710,519` |
 | **Ending Cash Balance** | Page 1 | 1.0_master-view | Projected ending cash balance progression per week (`2026-W01` to `2026-W13`).<br>**Example:** `£21,650` in W01 growing to `£154,803` in W13 |
 | **Filtered Net Cash Flow** | Page 2 | 1.0_master-view | Showing total net cash movement based on active filters (e.g. Category, Sub Category).<br>**Example:** `£710,519` |
-| **Forecast Net Flow** | Page 3 | 1.3_actual-v-forecast-category-variance | Baseline 13-week projected net cash movement.<br>**Example:** `£710,519` |
-| **Actual Net Flow** | Page 3 | 1.3_actual-v-forecast-category-variance | Total realized net cash movement recorded to date.<br>**Example:** `£829,200` |
-| **Net Variance** | Page 3 | 1.3_actual-v-forecast-category-variance | Absolute monetary variance between Actual and Forecasted cash flows (`Actual - Forecast`).<br>**Example:** `£118,681` |
-| **Net Variance %** | Page 3 | 1.3_actual-v-forecast-category-variance | Percentage variance of actual performance against budget/forecast (`Net Variance / Forecast`).<br>**Example:** `16.70%` |
+| **Forecast Net Flow** | Page 3 | 1.3_variance_analysis_view | Baseline 13-week projected net cash movement.<br>**Example:** `£710,519` |
+| **Actual Net Flow** | Page 3 | 1.3_variance_analysis_view | Total realized net cash movement recorded to date.<br>**Example:** `£829,200` |
+| **Net Variance** | Page 3 | 1.3_variance_analysis_view | Absolute monetary variance between Actual and Forecasted cash flows (`Actual - Forecast`).<br>**Example:** `£118,681` |
+| **Net Variance %** | Page 3 | 1.3_variance_analysis_view | Percentage variance of actual performance against budget/forecast (`Net Variance / Forecast`).<br>**Example:** `16.70%` |
 | **Opening Cash** | Page 4 | 1.1_weekly-summary-view | Actual starting cash balance at the beginning of the actuals tracking period.<br>**Example:** `£15,870` |
 | **Ending Cash** | Page 4 | 1.1_weekly-summary-view | Actual closing cash balance recorded at the end of the selected actuals period.<br>**Example:** `£154,803` |
 
