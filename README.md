@@ -79,21 +79,22 @@ The repository contains four core SQL view definitions powering the reporting la
 | `opening_cash` | `NUMERIC` | Cash balance at the start of the week. Calculated dynamically from baseline starting cash + prior cumulative net flows. |
 | `ending_cash` | `NUMERIC` | Cash balance at the end of the week (`opening_cash + amount`). 
 
-### 1.2_actual-v-forecast_summary (Macro Variance Engine)
+### 1.2_actual-v-forecast_category-variance (Category & Cost Leakage Breakdown)
 
-* **Purpose:** Pivots raw transaction rows into weekly side-by-side totals and computes absolute and percentage variance using a dynamic daily date grid.
-* **Primary Use:** **Powers Page 3 (Scorecards + Weekly Net Cash Flow + Weekly Variance Summary)**
+* **Purpose:** Aggregates performance by category and sub-category to pinpoint specific operational budget overspends and revenue variances.
+* **Primary Use:** Powers Page 3 (Cost & Expense Leakage Breakdown Table)
 
-#### Schema Breakdown
+**Schema Breakdown**
 
 | Column Name | Type | Key Calculation / Notes |
 | :--- | :--- | :--- |
-| **`Week_Label`** | `STRING` | Formatted year-week identifier (`YYYY-WXX`, e.g., `2026-W18`). |
-| **`week_start_date`** | `DATE` | Start date (Monday) of the week (`DATE_TRUNC(Date, ISOWEEK)`). |
-| **`forecast_net_flow`** | `NUMERIC` | Total baseline projected cash movement (`SUM(CASE WHEN Type = 'Forecast' THEN Amount ELSE 0 END)`). |
-| **`actual_net_flow`** | `NUMERIC` | Total realized bank transaction movement (`SUM(CASE WHEN Type = 'Actual' THEN Amount ELSE 0 END)`). |
-| **`variance_amount`** | `NUMERIC` | Absolute monetary difference (`actual_net_flow - forecast_net_flow`). |
-| **`variance_pct`** | `PERCENT` | Relative performance delta (`SAFE_DIVIDE(variance_amount, ABS(forecast_net_flow))`). |
+| `Week_Label` | `STRING` | Formatted year-week identifier (`YYYY-WXX`). |
+| `week_start_date` | `DATE` | Start date (Monday) of the week. |
+| `Category` | `STRING` | Top-level financial classification (`Revenue`, `Operating Expenses`, `COGS`, `Financing Activities`). |
+| `Sub_Category` | `STRING` | Detailed operational line item category (e.g., `Marketing & Advertising`, `Loan Payments`). |
+| `forecast_amount` | `NUMERIC` | Total projected amount for the category/sub-category (`SUM(CASE WHEN Type = 'Forecast' THEN Amount ELSE 0 END)`). |
+| `actual_amount` | `NUMERIC` | Total realized actual amount for the category/sub-category (`SUM(CASE WHEN Type = 'Actual' THEN Amount ELSE 0 END)`). |
+| `variance_amount` | `NUMERIC` | Absolute monetary difference (`actual_amount - forecast_amount`). |
 
 ### 1.3_actual-v-forecast_category-variance (Category & Cost Leakage Breakdown)
 
