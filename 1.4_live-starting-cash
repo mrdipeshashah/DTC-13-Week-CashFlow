@@ -1,0 +1,45 @@
+WITH master_union AS (
+  SELECT Date, Amount, 'Forecast' AS Type FROM `mrdipeshashah.13weekcashflow.forecast`
+  UNION ALL
+  SELECT Date, Amount, 'Actual' AS Type FROM `mrdipeshashah.13weekcashflow.actual`
+),
+daily_net AS (
+  SELECT 
+    Date,
+    SUM(Amount) AS Day_Amount
+  FROM master_union
+  WHERE Type = 'Actual' 
+     OR (Type = 'Forecast' AND Date NOT IN (SELECT DISTINCT Date FROM `mrdipeshashah.13weekcashflow.actual`))
+  GROUP BY Date
+),
+date_grid AS (
+  SELECT day AS Date
+  FROM UNNEST(
+    GENERATE_DATE_ARRAY(
+      (SELECT MIN(Date) FROM master_union),
+      (SELECT MAX(Date) FROM master_union),
+      INTERVAL 1 DAY
+    )
+  ) AS day
+),
+daily_opening_cash AS (
+  SELECT 
+    g.Date,
+    -- Calculates exact opening balance for every single day
+    13800 + COALESCE(SUM(d.Day_Amount) OVER (
+      ORDER BY g.Date 
+      ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
+    ), 0) AS Starting_Cash
+  FROM date_grid g
+  LEFT JOIN daily_net d ON g.Date = d.Date
+)
+-- Aggregate to 1 clean row per ISO week representing the exact Monday opening balance
+SELECT 
+  Date,
+  EXTRACT(ISOYEAR FROM Date) AS Year,
+  EXTRACT(ISOWEEK FROM Date) AS Week_Number,
+  CONCAT(EXTRACT(ISOYEAR FROM Date), '-W', LPAD(CAST(EXTRACT(ISOWEEK FROM Date) AS STRING), 2, '0')) AS Week_Label,
+  Starting_Cash
+FROM daily_opening_cash
+-- Filters strictly to the first day (Monday) of each ISO week
+WHERE EXTRACT(DAYOFWEEK FROM Date) = 2
