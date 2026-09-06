@@ -79,7 +79,7 @@ The repository contains four core SQL view definitions powering the reporting la
 | `opening_cash` | `NUMERIC` | Cash balance at the start of the week. Calculated dynamically from baseline starting cash + prior cumulative net flows. |
 | `ending_cash` | `NUMERIC` | Cash balance at the end of the week (`opening_cash + amount`). 
 
-### 1.2_actual-v-forecast_category-variance (Category & Cost Leakage Breakdown)
+### 1.2_category-view (Category & Cost Leakage Breakdown)
 
 * **Purpose:** Aggregates performance by category and sub-category to pinpoint specific operational budget overspends and revenue variances.
 * **Primary Use:** Powers Page 3 (Cost & Expense Leakage Breakdown Table)
