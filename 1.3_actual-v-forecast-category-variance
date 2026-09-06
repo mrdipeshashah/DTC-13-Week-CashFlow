@@ -1,19 +1,21 @@
 SELECT
   Week_Label,
   DATE_TRUNC(Date, ISOWEEK) AS week_start_date,
-  Category,
-  Sub_Category,
-  SUM(CASE WHEN Type = 'Forecast' THEN Amount ELSE 0 END) AS forecast_amount,
-  SUM(CASE WHEN Type = 'Actual' THEN Amount ELSE 0 END) AS actual_amount,
+  -- Aggregated Net Flows
+  SUM(CASE WHEN Type = 'Forecast' THEN Amount ELSE 0 END) AS forecast_net_flow,
+  SUM(CASE WHEN Type = 'Actual' THEN Amount ELSE 0 END) AS actual_net_flow,
+  -- Absolute Variance (£)
   SUM(CASE WHEN Type = 'Actual' THEN Amount ELSE 0 END) - 
-  SUM(CASE WHEN Type = 'Forecast' THEN Amount ELSE 0 END) AS variance_amount
+  SUM(CASE WHEN Type = 'Forecast' THEN Amount ELSE 0 END) AS variance_amount,
+  -- Percentage Variance (%)
+  SAFE_DIVIDE(
+    SUM(CASE WHEN Type = 'Actual' THEN Amount ELSE 0 END) - 
+    SUM(CASE WHEN Type = 'Forecast' THEN Amount ELSE 0 END),
+    ABS(SUM(CASE WHEN Type = 'Forecast' THEN Amount ELSE 0 END))
+  ) AS variance_pct
 FROM `enter.tablename.13weekcashflow.master_13weekcashflow_view`
 GROUP BY 
   Week_Label, 
-  week_start_date, 
-  Category, 
-  Sub_Category
+  week_start_date
 ORDER BY 
-  week_start_date ASC, 
-  Category, 
-  Sub_Category;
+  week_start_date ASC;
