@@ -96,22 +96,21 @@ The repository contains four core SQL view definitions powering the reporting la
 | `actual_amount` | `NUMERIC` | Total realized actual amount for the category/sub-category (`SUM(CASE WHEN Type = 'Actual' THEN Amount ELSE 0 END)`). |
 | `variance_amount` | `NUMERIC` | Absolute monetary difference (`actual_amount - forecast_amount`). |
 
-### 1.3_actual-v-forecast_category-variance (Category & Cost Leakage Breakdown)
+### 1.3_variance_analysis (Weekly Overall Net Flow Variance)
 
-* **Purpose:** Aggregates performance by category and sub-category to pinpoint specific operational budget overspends and revenue variances.
-* **Primary Use:** **Powers Page 3 (Cost & Expense Leakage Breakdown Table)**
+* **Purpose:** Evaluates total weekly net cash flow performance by comparing aggregated actuals against forecasts, calculating both absolute and percentage variances without category-level breakdown.
+* **Primary Use:** Powers Page 3 (Weekly Actual vs Forecast Variance Cards & Net Flow Trend Visuals)
 
-#### Schema Breakdown
+**Schema Breakdown**
 
 | Column Name | Type | Key Calculation / Notes |
 | :--- | :--- | :--- |
-| **`Week_Label`** | `STRING` | Formatted year-week identifier (`YYYY-WXX`). |
-| **`week_start_date`** | `DATE` | Start date (Monday) of the week. |
-| **`Category`** | `STRING` | Top-level financial classification (`Revenue`, `Operating Expenses`, `COGS`). |
-| **`Sub_Category`** | `STRING` | Detailed operational line item category (e.g., `Marketing & Advertising`). |
-| **`forecast_amount`** | `NUMERIC` | Total projected amount for the category/sub-category. |
-| **`actual_amount`** | `NUMERIC` | Total realized actual amount for the category/sub-category. |
-| **`variance_amount`** | `NUMERIC` | Absolute monetary difference (`actual_amount - forecast_amount`). |
+| `Week_Label` | `STRING` | Formatted year-week identifier (`YYYY-WXX`). |
+| `week_start_date` | `DATE` | Start date (Monday) of the week (`DATE_TRUNC(Date, ISOWEEK)`). |
+| `forecast_net_flow` | `NUMERIC` | Total aggregated forecasted net cash flow for the week (`SUM(CASE WHEN Type = 'Forecast' THEN Amount ELSE 0 END)`). |
+| `actual_net_flow` | `NUMERIC` | Total aggregated actual net cash flow for the week (`SUM(CASE WHEN Type = 'Actual' THEN Amount ELSE 0 END)`). |
+| `variance_amount` | `NUMERIC` | Absolute monetary difference in net cash flow (`actual_net_flow - forecast_net_flow`). |
+| `variance_pct` | `NUMERIC` | Percentage variance calculated as `SAFE_DIVIDE((actual_net_flow - forecast_net_flow), ABS(forecast_net_flow))`. |
 
 ### 1.4_live-starting-cash-view (Live Starting Cash Baseline)
 
