@@ -136,11 +136,11 @@ The repository contains four core SQL view definitions powering the reporting la
 | **13 Week Net Cash Flow** | Page 1 | 1.0_master-view | Total net cash movement (inflows minus outflows) forecasted across the entire 13 weeks.<br>**Example:** `£710,519` |
 | **Ending Cash Balance** | Page 1 | 1.0_master-view | Projected ending cash balance progression per week (`2026-W01` to `2026-W13`).<br>**Example:** `£21,650` in W01 growing to `£154,803` in W13 |
 | **Filtered Net Cash Flow** | Page 2 | 1.0_master-view | Dynamic scorecard showing total net cash movement based on active filters (e.g. Category, Sub Category).<br>**Example:** `£710,519` |
-| **Forecast Net Flow** | Page 3 | View 1 | Baseline 13-week projected net cash movement.<br>**Example:** `£710,519` |
-| **Actual Net Flow** | Page 3 | View 1 | Total realized net cash movement recorded to date.<br>**Example:** `£829,200` |
-| **Net Variance** | Page 3 | View 1 | Absolute monetary variance between Actual and Forecasted cash flows (`Actual - Forecast`).<br>**Example:** `£118,681` |
-| **Net Variance %** | Page 3 | View 1 | Percentage variance of actual performance against budget/forecast (`Net Variance / Forecast`).<br>**Example:** `16.70%` |
-| **Opening Cash** | Page 3 | View 2 | Starting balance for the chronologically earliest week in the selected view range (rendered as 1-row table scorecard).<br>**Example:** `£15,870` (or `£154,803` for W14) |
-| **Actual Weekly Cash Flow** | Page 3 / Page 4 | View 2 | High-level weekly summary table with fields: *Week Label*, *Week Starting Date*, *Opening Cash*, *Amount*, and *Ending Cash*.<br>**Example:** W01 Amount = `£7,850`, Ending Cash = `£23,720` |
+| **Forecast Net Flow** | Page 3 | 1.3_actual-v-forecast-category-variance | Baseline 13-week projected net cash movement.<br>**Example:** `£710,519` |
+| **Actual Net Flow** | Page 3 | 1.3_actual-v-forecast-category-variance | Total realized net cash movement recorded to date.<br>**Example:** `£829,200` |
+| **Net Variance** | Page 3 | 1.3_actual-v-forecast-category-variance | Absolute monetary variance between Actual and Forecasted cash flows (`Actual - Forecast`).<br>**Example:** `£118,681` |
+| **Net Variance %** | Page 3 | 1.3_actual-v-forecast-category-variance | Percentage variance of actual performance against budget/forecast (`Net Variance / Forecast`).<br>**Example:** `16.70%` |
+| **Opening Cash** | Page 4 | View 1 | Actual starting cash balance at the beginning of the actuals tracking period.<br>**Example:** `£15,870` |
+| **Ending Cash** | Page 4 | View 1 | Actual closing cash balance recorded at the end of the selected actuals period.<br>**Example:** `£154,803` |
 
 
