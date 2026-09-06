@@ -140,7 +140,7 @@ The repository contains five core SQL view definitions powering the reporting la
 | **Actual Net Flow** | Page 3 | 1.3_variance_analysis_view | Total realized net cash movement recorded to date.<br>**Example:** `£829,200` |
 | **Net Variance** | Page 3 | 1.3_variance_analysis_view | Absolute monetary variance between Actual and Forecasted cash flows (`Actual - Forecast`).<br>**Example:** `£118,681` |
 | **Net Variance %** | Page 3 | 1.3_variance_analysis_view | Percentage variance of actual performance against budget/forecast (`Net Variance / Forecast`).<br>**Example:** `16.70%` |
-| **Opening Cash** | Page 4 | 1.1_weekly-summary-view | Actual starting cash balance at the beginning of the actuals tracking period.<br>**Example:** `£15,870` |
+| **Opening Cash** | Page 4 | 1.1_weekly-summary-view + 1.4_live-starting-cash-view (blended data) | Actual starting cash balance at the beginning of the actuals tracking period.<br>**Example:** `£15,870` |
 | **Ending Cash** | Page 4 | 1.1_weekly-summary-view | Actual closing cash balance recorded at the end of the selected actuals period.<br>**Example:** `£154,803` |
 
 
