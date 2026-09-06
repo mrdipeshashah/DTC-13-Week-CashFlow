@@ -129,9 +129,9 @@ The repository contains four core SQL view definitions powering the reporting la
 
 ## KPI METRICS DICTIONARY
 
-| KPI Name | Page No. | GitHub View No. | Description & Example |
+| KPI Name | Page No. | GitHub No. | Description & Example |
 | :--- | :---: | :---: | :--- |
-| **Live Starting Cash** | Page 1 | View 1 | Displays the opening bank balance at the start of the 13-week forecast period.<br>**Example:** `£13,800` |
+| **Live Starting Cash** | Page 1 | 1.4_live-starting-cash-view | Displays the opening bank balance at the start of the 13-week forecast period.<br>**Example:** `£13,800` |
 | **13 Week Minimum Cash Balance** | Page 1 | View 1 | Represents the lowest projected cash position over the 13-week forecast horizon.<br>**Example:** `£21,650` |
 | **13 Week Net Cash Flow** | Page 1 | View 1 | Total net cash movement (inflows minus outflows) forecasted across the entire 13 weeks.<br>**Example:** `£710,519` |
 | **Forecasted 13 Week Cash Balance** | Page 1 | View 2 | Bar chart visualizing projected ending cash balance progression per week (`2026-W01` to `2026-W13`).<br>**Example:** `£21,650` in W01 growing to `£154,803` in W13 |
