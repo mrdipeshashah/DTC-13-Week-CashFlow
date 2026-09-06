@@ -1,0 +1,19 @@
+SELECT
+  Week_Label,
+  DATE_TRUNC(Date, ISOWEEK) AS week_start_date,
+  Category,
+  Sub_Category,
+  SUM(CASE WHEN Type = 'Forecast' THEN Amount ELSE 0 END) AS forecast_amount,
+  SUM(CASE WHEN Type = 'Actual' THEN Amount ELSE 0 END) AS actual_amount,
+  SUM(CASE WHEN Type = 'Actual' THEN Amount ELSE 0 END) - 
+  SUM(CASE WHEN Type = 'Forecast' THEN Amount ELSE 0 END) AS variance_amount
+FROM `enter.tablename.13weekcashflow.master_13weekcashflow_view`
+GROUP BY 
+  Week_Label, 
+  week_start_date, 
+  Category, 
+  Sub_Category
+ORDER BY 
+  week_start_date ASC, 
+  Category, 
+  Sub_Category;
