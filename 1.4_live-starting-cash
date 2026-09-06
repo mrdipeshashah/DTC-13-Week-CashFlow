@@ -1,7 +1,7 @@
 WITH master_union AS (
-  SELECT Date, Amount, 'Forecast' AS Type FROM `mrdipeshashah.13weekcashflow.forecast`
+  SELECT Date, Amount, 'Forecast' AS Type FROM `enter.tablename.13weekcashflow.forecast`
   UNION ALL
-  SELECT Date, Amount, 'Actual' AS Type FROM `mrdipeshashah.13weekcashflow.actual`
+  SELECT Date, Amount, 'Actual' AS Type FROM `enter.tablename.13weekcashflow.actual`
 ),
 daily_net AS (
   SELECT 
@@ -9,7 +9,7 @@ daily_net AS (
     SUM(Amount) AS Day_Amount
   FROM master_union
   WHERE Type = 'Actual' 
-     OR (Type = 'Forecast' AND Date NOT IN (SELECT DISTINCT Date FROM `mrdipeshashah.13weekcashflow.actual`))
+     OR (Type = 'Forecast' AND Date NOT IN (SELECT DISTINCT Date FROM `enter.tablename.13weekcashflow.actual`))
   GROUP BY Date
 ),
 date_grid AS (
