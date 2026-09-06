@@ -112,6 +112,21 @@ The repository contains four core SQL view definitions powering the reporting la
 | **`actual_amount`** | `NUMERIC` | Total realized actual amount for the category/sub-category. |
 | **`variance_amount`** | `NUMERIC` | Absolute monetary difference (`actual_amount - forecast_amount`). |
 
+### 1.4_live-starting-cash-view (Live Starting Cash Baseline)
+
+* **Purpose:** Establishes the dynamic opening liquidity balance derived from live bank settlements to seed the rolling 13-week forecast model.
+* **Primary Use:** Powers the "Live Starting Cash" scorecard on Page 1 (Executive Summary) and feeds baseline calculations across dashboard components.
+
+#### Schema Breakdown
+
+| Column Name | Type | Key Calculation / Notes |
+| :--- | :--- | :--- |
+| `Date` | `DATE` | Specific date corresponding to the cash balance entry. |
+| `Year` | `INTEGER` | Calendar year identifier (e.g., `2026`). |
+| `Week_Number` | `INTEGER` | Sequential numerical week identifier (`1` to `52`). |
+| `Week_Label` | `STRING` | Formatted year-week identifier (`YYYY-WXX`). |
+| `Starting_Cash` | `NUMERIC` | Opening total liquid bank account balance for the given week. |
+
 ## DATA STUDIO DASHBOARD & KPI METRICS 
 
 The dashboard is structured into three main pages to serve high-level executive reviews, operational auditing, and variance accounting. Each visual component maps directly back to the SQL views in the repository:
