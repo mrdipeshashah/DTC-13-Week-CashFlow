@@ -48,7 +48,7 @@ Raw transaction logs and driver forecasts are maintained in Google Sheets. The s
 
 The repository contains four core SQL view definitions powering the reporting layer:
 
-### `1.0_master_view` (Granular Ledger View)
+### `1.0_master-view` (Granular Ledger View)
 * **Purpose:** Combines `Forecast` and `Actual` logs into a unified dataset, calculates calendar/ISO week numbers, and formats `Week_Label` strings
 * **Primary Use:** Powers **Page 1 & 2 (Page 1: Scorecards + 13 Week Cash Balance Forecasted + Weekly Cash In & Cash Out + 13 Week Expense Outflow + Weekly Net Cash Flow. Page 2: Scorecards + Detailed Weekly Cash Flow)**
 
@@ -65,7 +65,7 @@ The repository contains four core SQL view definitions powering the reporting la
 | `Notes` | `STRING` | Qualitative context/memo. |
 | `Type` | `STRING` | Source classification (`Actual` vs `Forecast`). |
 
-### `1.1_weekly_summary_view` (Rolling Cash Flow Engine)
+### `1.1_weekly-summary-view` (Rolling Cash Flow Engine)
 * **Purpose:** Aggregates net cash flows by week and applies SQL window functions (`SUM() OVER (...)`) to compute exact rolling `Opening Cash` and `Ending Cash` positions week-over-week
 * **Primary Use:** Powers **Page 2 (Weekly Cash Flow)**
 
@@ -79,7 +79,7 @@ The repository contains four core SQL view definitions powering the reporting la
 | `opening_cash` | `NUMERIC` | Cash balance at the start of the week. Calculated dynamically from baseline starting cash + prior cumulative net flows. |
 | `ending_cash` | `NUMERIC` | Cash balance at the end of the week (`opening_cash + amount`). 
 
-### 1.2_actual_v_forecast_summary (Macro Variance Engine)
+### 1.2_actual-v-forecast_summary (Macro Variance Engine)
 
 * **Purpose:** Pivots raw transaction rows into weekly side-by-side totals and computes absolute and percentage variance using a dynamic daily date grid.
 * **Primary Use:** **Powers Page 3 (Scorecards + Weekly Net Cash Flow + Weekly Variance Summary)**
@@ -95,7 +95,7 @@ The repository contains four core SQL view definitions powering the reporting la
 | **`variance_amount`** | `NUMERIC` | Absolute monetary difference (`actual_net_flow - forecast_net_flow`). |
 | **`variance_pct`** | `PERCENT` | Relative performance delta (`SAFE_DIVIDE(variance_amount, ABS(forecast_net_flow))`). |
 
-### 1.3_actual_v_forecast_category_variance (Category & Cost Leakage Breakdown)
+### 1.3_actual-v-forecast_category-variance (Category & Cost Leakage Breakdown)
 
 * **Purpose:** Aggregates performance by category and sub-category to pinpoint specific operational budget overspends and revenue variances.
 * **Primary Use:** **Powers Page 3 (Cost & Expense Leakage Breakdown Table)**
